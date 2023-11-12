@@ -1,0 +1,32 @@
+{
+	"compilerOptions": {
+		"allowJs": false,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+		"forceConsistentCasingInFileNames": true,
+		"lib": [
+			"es6"
+		],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"preserveConstEnums": true,
+		"resolveJsonModule": true,
+		"rootDir": ".",
+		"outDir": "./.out",
+		"skipLibCheck": true, /* Skip type checking of declaration files. */
+		"sourceMap": true,
+		"strict": true,
+		"strictFunctionTypes": false,
+		"strictNullChecks": true,
+		"target": "es6"
+	},
+	"exclude": [
+		"node_modules",
+		"jest.config.js",
+	]
+}

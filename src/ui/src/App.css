@@ -1,0 +1,32 @@
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5%;
+}
+
+.Form {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-direction: column;
+  background-color: lightgray;
+  width: 30%;
+  height: 50vh;
+}
+
+.Form > div{
+  width: 85%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  height: fit-content;
+}
+
+.Button button{
+  float: right;
+  color: #e2e2e2;
+  background-color: #615e5e;
+  height: 30px;
+  width: 70px;
+  margin-top: 10px;
+}

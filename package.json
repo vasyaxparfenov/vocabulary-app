@@ -1,0 +1,17 @@
+{
+  "name": "vocabulary-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build:ui": "npm run test --prefix ./src/ui -- --watchAll=false && npm run build --prefix ./src/ui",
+    "build:api": "npm run test --prefix ./src/api && npm run build --prefix ./src/api",
+    "build": "npm run build:ui && npm run build:api"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0",
+    "aws-cdk": "^2.105.0",
+    "aws-cdk-lib": "^2.105.0",
+    "ts-node": "^10.9.1"
+  }
+}
