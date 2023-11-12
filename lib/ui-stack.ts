@@ -15,7 +15,8 @@ export class UIStack extends Stack {
         super(scope, stackName, props)
 
         const bucket = new Bucket(this, this.stackName + "Bucket", {
-            accessControl: BucketAccessControl.PRIVATE
+            accessControl: BucketAccessControl.PRIVATE,
+            versioned: true
         })
 
         new BucketDeployment(this, this.stackName + "Deployment", {

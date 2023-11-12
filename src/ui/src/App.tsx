@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { analyse } from './api';
 import './App.css';
-import TextBox from './TextBox';
+import Input from './Input';
+import FieldLayout from './FieldLayout';
+import Output from './Output';
 
 
 function App() {
 
-  let [result, setResult] = useState<string>("")
+  let [results, setResult] = useState<string[]>([])
+  let [error, setError] = useState<string>()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -19,14 +22,23 @@ function App() {
 
     const result = await analyse(input);
 
-    setResult(result.error ?? result.value.join("<br/>"));
+    if(result.error){
+      setError(result.error)
+      return;
+    }
+
+    setResult(result.value)
   }
 
   return (
     <div className="App">
       <form aria-label="analysis-form" className="Form" onSubmit={handleSubmit}>
-        <TextBox name="input" headerText="Input text"/>
-        <TextBox name="output" headerText="Results" readonly text={result}/>
+      <FieldLayout header="Input Text">
+          <Input name="input"/>
+      </FieldLayout>
+      <FieldLayout header="Results">
+          <Output error={error} items={results}/>
+      </FieldLayout>
         <div className="Button">
           <button>Submit</button>
         </div>

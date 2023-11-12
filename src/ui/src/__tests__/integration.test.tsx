@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { PathParams, ResponseComposition, rest, RestContext, RestRequest } from 'msw'
 import {setupServer} from 'msw/node'
 import App from '../App';
@@ -52,8 +52,10 @@ describe("integration tests",()=>{
             fireEvent.click(button)
             
             await waitFor(()=> {
-                const output = screen.getByRole("textbox", {name: "output"})
-                expect(output).toHaveTextContent("one: 1<br/>two: 1<br/>three: 1")
+                text.split(" ").forEach(t => {
+                    const p = screen.getByText(`${t}: 1`)
+                    expect(p).toBeInTheDocument()
+                })
             })
         })
 
@@ -77,8 +79,8 @@ describe("integration tests",()=>{
             fireEvent.click(button)
             
             await waitFor(()=> {
-                const output = screen.getByRole("textbox", {name: "output"})
-                expect(output).toHaveTextContent(errorMessage)
+                const output = screen.getByText(errorMessage)
+                expect(output).toBeInTheDocument()
             })
         })
 
@@ -100,8 +102,8 @@ describe("integration tests",()=>{
             fireEvent.click(button)
             
             await waitFor(()=> {
-                const output = screen.getByRole("textbox", {name: "output"})
-                expect(output).toHaveTextContent("Service failed to handle request.")
+                const output = screen.getByText("Service failed to handle request.")
+                expect(output).toBeInTheDocument()
             })
         })
     })
@@ -120,8 +122,8 @@ describe("integration tests",()=>{
         fireEvent.click(button)
         
         await waitFor(()=> {
-            const output = screen.getByRole("textbox", {name: "output"})
-            expect(output).toHaveTextContent("Service is unavailable.")
+            const output = screen.getByText("Service is unavailable.")
+            expect(output).toBeInTheDocument()
         })
     })
 })
