@@ -1,5 +1,6 @@
-import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
-import { CloudFrontAllowedMethods, CloudFrontWebDistribution, OriginAccessIdentity, OriginProtocolPolicy } from "aws-cdk-lib/aws-cloudfront";
+import { CfnOutput, Duration, Fn, Stack, StackProps } from "aws-cdk-lib";
+import { AllowedMethods, CachePolicy, CloudFrontAllowedMethods, CloudFrontWebDistribution, Distribution, OriginAccessIdentity, OriginProtocolPolicy, OriginSslPolicy } from "aws-cdk-lib/aws-cloudfront";
+import { HttpOrigin, S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { Bucket, BucketAccessControl } from "aws-cdk-lib/aws-s3"
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs"
@@ -14,49 +15,49 @@ export class UIStack extends Stack {
     constructor(scope: Construct, stackName: string, props: UIStackProps) {
         super(scope, stackName, props)
 
-        const bucket = new Bucket(this, this.stackName + "Bucket", {
+        const bucket = new Bucket(this, this.stackName + "-bucket", {
             accessControl: BucketAccessControl.PRIVATE,
             versioned: true
         })
 
-        new BucketDeployment(this, this.stackName + "Deployment", {
+        new BucketDeployment(this, this.stackName + "-deployment", {
             destinationBucket: bucket,
             sources: [Source.asset("./src/ui/build")]
         })
 
-        const originAccessIdentity = new OriginAccessIdentity(this, stackName+'OriginAccessIdentity');
+        const originAccessIdentity = new OriginAccessIdentity(this, stackName+'-origin-access-identity');
 
         bucket.grantRead(originAccessIdentity)
-
-        console.log(props.apiUrl)
 
         const hostname = props.apiUrl.split("://")[1].split("/")[0]
         const pathname = props.apiUrl.split("://")[1].split("/")[1]
 
-        console.log(hostname)
-        console.log(pathname)
+        const noCachePolicy = new CachePolicy(this, stackName + "-cache-policy", {
+            maxTtl: Duration.seconds(0),
+            defaultTtl: Duration.seconds(0)
+        })
 
-        const distribution = new CloudFrontWebDistribution(this, stackName + "Distribution", {
-            originConfigs : [
-                {
-                    s3OriginSource: {
-                        s3BucketSource: bucket,
-                        originAccessIdentity: originAccessIdentity,
-                    },
-                    behaviors: [{isDefaultBehavior: true}]
+        const staticFilesOrigin = new S3Origin(bucket, {
+            originAccessIdentity: originAccessIdentity
+        })
+
+        const distribution = new Distribution(this, stackName + "-distribution", {
+            defaultBehavior: {
+                origin: staticFilesOrigin
+            },
+            additionalBehaviors: {
+                "index.html": { 
+                    origin: staticFilesOrigin,
+                    cachePolicy: noCachePolicy
                 },
-                {
-                    customOriginSource: {
-                        domainName: hostname,
+                "/api/*" : {
+                    origin: new HttpOrigin(hostname, {
                         originPath: `/${pathname}`,
-                        originProtocolPolicy: OriginProtocolPolicy.HTTPS_ONLY                        
-                    },
-                    behaviors: [{
-                        pathPattern: "/api/*",
-                        allowedMethods: CloudFrontAllowedMethods.ALL
-                    }]
+                        protocolPolicy: OriginProtocolPolicy.HTTPS_ONLY
+                    }),
+                    allowedMethods: AllowedMethods.ALLOW_ALL
                 }
-            ],
+            },
             defaultRootObject: "index.html"
         })
 

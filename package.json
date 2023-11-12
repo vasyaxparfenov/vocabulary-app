@@ -4,9 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build:ui": "npm run test --prefix ./src/ui -- --watchAll=false && npm run build --prefix ./src/ui",
-    "build:api": "npm run test --prefix ./src/api && npm run build --prefix ./src/api",
-    "build": "npm run build:ui && npm run build:api"
+    "build:ui": "npm install --prefix ./src/ui && npm run test --prefix ./src/ui -- --watchAll=false && npm run build --prefix ./src/ui",
+    "build:api": "npm install --prefix ./src/api && npm run test --prefix ./src/api && npm run build --prefix ./src/api",
+    "build": "npm run build:ui && npm run build:api",
+    "e2e": "npm install --prefix ./e2e && npm run test --prefix ./e2e"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",

@@ -27,18 +27,24 @@ function App() {
       return;
     }
 
+    if(result.value.length === 0){
+      setError("Unfortunately our vocabulary doesn't contain provided words.")
+      return;
+    }
+
+    setError("")
     setResult(result.value)
   }
 
   return (
     <div className="App">
       <form aria-label="analysis-form" className="Form" onSubmit={handleSubmit}>
-      <FieldLayout header="Input Text">
-          <Input name="input"/>
-      </FieldLayout>
-      <FieldLayout header="Results">
-          <Output error={error} items={results}/>
-      </FieldLayout>
+        <FieldLayout header="Input Text">
+            <Input name="input"/>
+        </FieldLayout>
+        <FieldLayout header="Results">
+            <Output error={error} items={results}/>
+        </FieldLayout>
         <div className="Button">
           <button>Submit</button>
         </div>

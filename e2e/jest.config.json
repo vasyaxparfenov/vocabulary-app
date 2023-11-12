@@ -1,0 +1,11 @@
+{
+    "preset": "jest-puppeteer",
+    "rootDir": ".",
+    "testRegex": "./*.test.[jt]s$",
+    "transform": {
+        "^.+\\.ts$": "ts-jest"
+    },
+    "transformIgnorePatterns": [
+        "/node_modules/"
+    ]
+}

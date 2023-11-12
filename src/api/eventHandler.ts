@@ -26,6 +26,10 @@ export class EventHandler implements IEventHandler<APIGatewayProxyEvent, APIGate
 
         const request = JSON.parse(event.body) as AnalysisRequest
 
+        if(request.words.length == 0){
+            return EventHandler.validationResponse("Please provide ")
+        }
+
         const stats = await this.vocabulary.analyse(request.words);
 
         return Promise.resolve({

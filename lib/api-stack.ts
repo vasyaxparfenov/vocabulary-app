@@ -10,7 +10,7 @@ export class ApiStack extends Stack {
     constructor(scope: Construct, id: string) {
         super(scope, id)
 
-        const restApi = new RestApi(this, this.stackName + "RestApi", {
+        const restApi = new RestApi(this, this.stackName + "-gateway", {
             deployOptions: {
                 stageName: "beta",
                 metricsEnabled: true,
@@ -19,7 +19,7 @@ export class ApiStack extends Stack {
             },
         })
 
-        const functionName = this.stackName + "Function"
+        const functionName = this.stackName + "-function"
 
         const lambdaFunction = new Function(this, functionName, {
             functionName: functionName,
